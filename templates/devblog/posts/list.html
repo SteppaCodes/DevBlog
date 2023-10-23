@@ -1,0 +1,11 @@
+{% extends 'devblog/base.html' %}
+
+{% block title %}Posts{% endblock title %}
+
+{% block content %}
+    <h2>All Posts</h2>
+
+        {% for post in posts %}
+            <h4>{{post}}</h4>
+        {% endfor %}
+{% endblock content %}
