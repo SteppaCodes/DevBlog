@@ -7,7 +7,7 @@ def posts(request):
     print(posts)
 
     context = {
-        posts:"posts",
+        "posts":posts,
     }
     
     return render(request,'devblog/posts/list.html',context)
@@ -17,6 +17,6 @@ def post_detail(request, id):
                              status=Post.Status.PUBLISHED)
 
     context= {
-        post: 'post'
+        "post": post
     }
     return render(request,'devblog/posts/detail.html',context)
