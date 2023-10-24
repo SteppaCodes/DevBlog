@@ -3,6 +3,7 @@
 {% block title %}Post-{% endblock title %}
 
 {% block content %}
+
 <div>
     <h1>{{post.title}}</h1>
     <p>{{post.body}}</p>
@@ -11,5 +12,7 @@
         <p><a href="{% url 'blog:post_share' post.id %}">Share Post Via E-mail</a></p>
     </div>
 </div>
+
+
 
 {% endblock content %}
