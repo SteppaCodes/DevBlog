@@ -6,6 +6,6 @@
     <h2>All Posts</h2>
 
         {% for post in posts %}
-            <h4>{{post}}</h4>
+            <h4><a href="{{post.get_absolute_url}}">{{post}}</a></h4>
         {% endfor %}
 {% endblock content %}
