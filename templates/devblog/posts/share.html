@@ -5,7 +5,7 @@
 {% block content %}
     {% if sent %}
         <h3>{{post.title}} Successfully sent to {{form.cleaned_data.to}}</h3>
-    
+        <p><a href="{{post.get_absolute_url}}">Back To Post</a></p>
     {% else %}
     <h2>Share {{post.title}} by e-mail</h2>
     <form method="POST">
