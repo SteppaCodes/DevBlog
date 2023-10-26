@@ -1,0 +1,12 @@
+{% extends 'devblog/base.html' %}
+
+{% block title %}Comment{% endblock title %}
+
+{% block content %}
+    {% if comment is not None %}
+        <h3>Your comment has been added</h3>
+        <p><a href="{{post.get_absolute_url}}">Back To Post</a></p>
+    {% else %}
+        {% include 'devblog/posts/includes/comment_form.html' %}
+    {% endif %}
+{% endblock content %}

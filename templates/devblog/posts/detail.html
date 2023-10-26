@@ -11,6 +11,18 @@
     <div>
         <p><a href="{% url 'blog:post_share' post.id %}">Share Post Via E-mail</a></p>
     </div>
+    <div>
+        {% with comments.count as total_comments %}
+            <h3>{{total_comments}} comment{{total_comments|pluralize}} </h3>
+        {% endwith %}
+    </div>
+    <div>
+        {% for comment in comments %}
+            <p>{{comment.title}}</p>
+            <p>{{comment.body}}</p>
+        {% endfor %}
+    </div>
+    {% include 'devblog/posts/includes/comment_form.html' %}
 </div>
 
 
