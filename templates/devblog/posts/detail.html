@@ -3,6 +3,7 @@
 {% block title %}Post-{% endblock title %}
 
 {% block content %}
+
 <div>
     <h1>{{post.title}}</h1>
     <p>{{post.body}}</p>
@@ -23,5 +24,7 @@
     </div>
     {% include 'devblog/posts/includes/comment_form.html' %}
 </div>
+
+
 
 {% endblock content %}
