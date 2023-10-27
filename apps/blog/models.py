@@ -3,10 +3,16 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status=Post.Status.PUBLISHED)
+
+class Tag(models.Model):
+    name = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.name
+
 
 class Post(models.Model):
 
@@ -19,12 +25,14 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=250)
     body = models.TextField()
+    tags = models.ManyToManyField(Tag, null=True,  blank=True)
     status = models.CharField(choices=Status.choices, default=Status.DRAFT,max_length=10)
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     objects = models.Manager() #Always add the default manager when you create a custom one
     published = PublishedManager()
+
 
 
     class Meta:
@@ -56,3 +64,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.body
+    

@@ -10,9 +10,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 from .forms import EmailPostForm, CommmentForm
-from .models import Post, Comment
+from .models import Post,Tag
+
+#TODO: Make post_ist page filter by the tags chosen
 
 def posts(request):
+    
     qs = Post.published.all()
     # Paginqtor class queries posts and return the number of posts specified
     #which is 5 
@@ -45,10 +48,12 @@ def post_detail(request, id):
     post = get_object_or_404(Post, id=id, 
                              status=Post.Status.PUBLISHED)
     comments = post.comments.filter(active=True)
+    tags = post.tags.all()
     form = CommmentForm()
     context= {
         "post": post,
         'comments':comments,
+        'tags':tags,
         'form':form
     }
     return render(request,'devblog/posts/detail.html',context)
@@ -98,3 +103,11 @@ def post_comment(request, id):
     }
     return render(request, 'devblog/posts/comment.html', context)
 
+def tag_page(request, id):
+    tag = get_object_or_404(Tag, id=id)
+    posts = Post.published.all()
+    post_list = posts.filter(tags__in= [tag])
+
+    print(post_list)
+
+    return render(request, 'devblog/posts/list.html')
