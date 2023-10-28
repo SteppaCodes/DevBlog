@@ -14,12 +14,25 @@ from .models import Post,Tag
 
 #TODO: Make post_ist page filter by the tags chosen
 
-def posts(request):
-    
+def posts(request, tag_id=None):
+    #Get all available tags
+    tags = Tag.objects.all()
+    #Get all published posts
     qs = Post.published.all()
+
+    #Check if a tag id was supplied from the url
+    if tag_id:
+        #Retrieve the tag clicked from the tag object
+        tag = tags.get(id=tag_id)
+        #set the queryset for the pagination to posts with_
+        # the tag specified 
+        post_list = qs.filter(tags__in = [tag])
+    # Else let the post be all posts in the database
+    else:  
+        post_list = qs
     # Paginqtor class queries posts and return the number of posts specified
     #which is 5 
-    paginator = Paginator(qs, 3)
+    paginator = Paginator(post_list, 4)
     #Gets the request page number, and sets it to 1 if the page is 
     #not in the  HTTP header
     page_number = request.GET.get('page', 1)
@@ -39,7 +52,8 @@ def posts(request):
 
     context = {
         "posts":posts,
-        "page":page_number
+        "page":page_number,
+        "tags":tags
     }
     
     return render(request,'devblog/posts/list.html',context)
