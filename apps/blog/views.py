@@ -1,18 +1,13 @@
 
 from django.shortcuts import render, get_object_or_404, redirect
-
 from django.core.mail import send_mail
-
 from django.views.decorators.http import require_POST
-
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.db.models import Count
 
 from .forms import EmailPostForm, CommmentForm
 from .models import Post,Tag
-
-#TODO: Make post_ist page filter by the tags chosen
 
 def posts(request, tag_id=None):
     #Get all available tags
@@ -64,10 +59,23 @@ def post_detail(request, id):
     comments = post.comments.filter(active=True)
     tags = post.tags.all()
     form = CommmentForm()
+
+    # get the ids of the tags used in the post,
+    # flat=True -> Gets single valuesinstead of tuples
+    post_tag_ids = post.tags.values_list('id', flat=True)
+    #filter all published posts and get posts with the same tags- 
+    #Use the distinct to only return one of each result
+    similar_posts = Post.published.filter(tags__in=post_tag_ids).exclude(id=post.id).distinct()
+    # Count the number of tags that are the same in similar posts -
+    # and return them from highest to lowest
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')
+    
+
     context= {
         "post": post,
         'comments':comments,
         'tags':tags,
+        'similar_posts':similar_posts,
         'form':form
     }
     return render(request,'devblog/posts/detail.html',context)
