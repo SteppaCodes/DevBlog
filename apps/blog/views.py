@@ -30,9 +30,9 @@ def posts(request, tag_id=None):
     # Else let the post be all posts in the database
     else:  
         post_list = qs
-    # Paginqtor class queries posts and return the number of posts specified
+    # Paginator class queries posts and return the number of posts specified
     #which is 5 
-    paginator = Paginator(post_list, 4)
+    paginator = Paginator(post_list, 5)
     #Gets the request page number, and sets it to 1 if the page is 
     #not in the  HTTP header
     page_number = request.GET.get('page', 1)
