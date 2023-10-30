@@ -62,6 +62,7 @@ def post_detail(request, id):
     form = CommmentForm()
 
     # get the ids of the tags used in the post,
+    #.values_list creates a list of values from the specified field (in this case....id)
     # flat=True -> Gets single valuesinstead of tuples
     post_tag_ids = post.tags.values_list('id', flat=True)
     #filter all published posts and get posts with the same tags- 
