@@ -6,8 +6,32 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count
 
+from django.contrib.postgres.search import SearchVector
+
 from .forms import EmailPostForm, CommmentForm, SearchForm
 from .models import Post,Tag
+
+#TODO: FIx Search template issue...add search form to base.html and handle search from there
+#TODO: Current problem -> the base.html does not read the context variable
+
+def search(request):
+    query= None
+    results = []
+    form = SearchForm()
+
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            results = Post.published.annotate(
+                search=SearchVector('title', 'body')
+            ).filter(search=query)
+    context = {
+        'form':form,
+        'results':results,
+        'query':query
+    }
+    return render(request, 'devblog/posts/search.html', context)
 
 
 def posts(request, tag_id=None):
