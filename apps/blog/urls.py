@@ -1,7 +1,6 @@
 from django.urls import path
 from .views import (posts, post_detail, 
                     post_share, post_comment,
-                    search
                     )
 
 

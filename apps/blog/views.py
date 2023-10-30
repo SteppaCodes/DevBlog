@@ -150,11 +150,3 @@ def post_comment(request, id):
     }
     return render(request, 'devblog/posts/comment.html', context)
 
-def tag_page(request, id):
-    tag = get_object_or_404(Tag, id=id)
-    posts = Post.published.all()
-    post_list = posts.filter(tags__in= [tag])
-
-    print(post_list)
-
-    return render(request, 'devblog/posts/list.html')
