@@ -12,6 +12,5 @@ urlpatterns = [
     path('<int:id>/comment', post_comment, name='post_comment'),
     path('posts/<int:tag_id>', posts, name='tag_page'),
 
-    path('search/', search, name='search' )
 ]
 
