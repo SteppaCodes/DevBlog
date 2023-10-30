@@ -5,9 +5,34 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count
+from django.contrib.postgres.search import SearchVector
 
-from .forms import EmailPostForm, CommmentForm
+from .forms import EmailPostForm, CommmentForm, SearchForm
 from .models import Post,Tag
+
+
+def search(request):
+    form = SearchForm()
+    query = None
+    #results = []
+
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            #Get the query from the form
+            query = form.cleaned_data['query']
+            #create a search vector to search for title and body using the query as a parameeter for the search
+            results = Post.published.annotate(
+                search=SearchVector('title', 'body')).filter(search=query)
+
+        else:
+            form = SearchForm()
+    context = {
+        'query':query,
+        'form':form,
+        'results': results
+    }
+    return render(request, 'devblog/posts/search.html', context)
 
 def posts(request, tag_id=None):
     #Get all available tags

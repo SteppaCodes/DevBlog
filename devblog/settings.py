@@ -28,7 +28,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    
+    'django.contrib.postgres'
 ]
 
 LOCAL_APPS = [

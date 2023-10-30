@@ -3,6 +3,7 @@
 {% block title %}Posts{% endblock title %}
 
 {% block content %}
+    
 <h2>Avalable Tags</h2>
         <p><a href="{% url 'blog:posts' %}">All</a></p>
         {% for tag in tags %}

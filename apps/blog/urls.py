@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (posts, post_detail, 
                     post_share, post_comment,
-                    tag_page
+                    search
                     )
 
 
@@ -11,6 +11,8 @@ urlpatterns = [
     path('<int:id>/share', post_share, name='post_share'),
 
     path('<int:id>/comment', post_comment, name='post_comment'),
-    path('posts/<int:tag_id>', posts, name='tag_page')
+    path('posts/<int:tag_id>', posts, name='tag_page'),
+
+    path('search/', search, name='search' )
 ]
 
