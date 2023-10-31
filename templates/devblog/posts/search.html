@@ -1,0 +1,22 @@
+{% extends 'devblog/base.html' %}
+
+{% block title %}Search{% endblock title %}
+
+{% block content %}
+
+<div>
+    <form method="GET" >
+        {{form}}
+        <input type="submit" value="Search">
+    </form>
+
+    {% if query %}
+        20 Posts found for "{{query}}"
+        {% for post in results %}
+            <p>{{post.title}}</p>
+        {% empty %}
+            <h3>No Posts found for "{{query}}"</h3>
+        {% endfor %}
+    {% endif %}  
+</div>
+{% endblock content %}
