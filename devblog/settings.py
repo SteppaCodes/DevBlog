@@ -19,6 +19,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 DJANGO_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,7 +29,8 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'django.contrib.postgres'
+    'django.contrib.postgres',
+    "debug_toolbar",
 ]
 
 LOCAL_APPS = [
@@ -38,6 +40,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -135,3 +138,7 @@ EMAIL_PORT = config("EMAIL_PORT")
 EMAIL_USE_SSL = config("EMAIL_USE_SSL")
 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
