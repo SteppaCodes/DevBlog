@@ -6,7 +6,8 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count
 
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import (SearchVector, SearchQuery, 
+                                            SearchRank, TrigramSimilarity)
 
 from .forms import EmailPostForm, CommmentForm, SearchForm
 from .models import Post,Tag
@@ -23,12 +24,14 @@ def search(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            search_vector = SearchVector('title', 'body')
-            search_query = SearchQuery(query)
-            
+            search_vector = SearchVector('title', weight='A') + SearchVector('body', weight='B')
+            search_query= SearchQuery(query)
+
             results = Post.published.annotate(
-                search=search_vector, rank = SearchRank(search_vector, search_query)
-            ).filter(search=search_query).order_by('-rank')
+                search=search_vector,
+                rank=SearchRank(search_vector, search_query)
+            ).filter(rank__gte=0.3).order_by('-rank')
+
     context = {
         'form':form,
         'results':results,
