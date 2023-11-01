@@ -14,6 +14,7 @@
         20 Posts found for "{{query}}"
         {% for post in results %}
             <p>{{post.title}}</p>
+            <p>{{post.body}}</p>
         {% empty %}
             <h3>No Posts found for "{{query}}"</h3>
         {% endfor %}
