@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count
 
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 from .forms import EmailPostForm, CommmentForm, SearchForm
 from .models import Post,Tag
@@ -23,9 +23,12 @@ def search(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
+            search_vector = SearchVector('title', 'body')
+            search_query = SearchQuery(query)
+            
             results = Post.published.annotate(
-                search=SearchVector('title', 'body')
-            ).filter(search=query)
+                search=search_vector, rank = SearchRank(search_vector, search_query)
+            ).filter(search=search_query).order_by('-rank')
     context = {
         'form':form,
         'results':results,
@@ -96,7 +99,6 @@ def post_detail(request, id):
     # and return them from highest to lowest
     similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')
     
-
     context= {
         "post": post,
         'comments':comments,
